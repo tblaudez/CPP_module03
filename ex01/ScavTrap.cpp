@@ -6,27 +6,30 @@
 /*   By: tblaudez <tblaudez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/23 16:41:25 by tblaudez      #+#    #+#                 */
-/*   Updated: 2020/09/24 16:24:36 by tblaudez      ########   odam.nl         */
+/*   Updated: 2020/10/08 11:40:22 by tblaudez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScavTrap.hpp"
 
-// Basic constructor
+#include <iostream> // cout
+#include <cstdlib> // rand
+
+
 ScavTrap::ScavTrap(std::string name) : _name(name), _hit_points(100), _max_hit_points(100),
 	_energy_points(50), _max_energy_points(50), _level(1), _melee_attack_damage(20),
 	_range_attack_damage(15), _armor_damage_reduction(3) {
 
-	std::cout << "Hey I am a SC4V-TP named " << this->_name << std::endl;
+	std::cout << "Hey there! The name's " << this->_name << std::endl;
 }
 
-// Copy constructor using operator= overload
+
 ScavTrap::ScavTrap(ScavTrap const& src) {
 
 	*this = src;
 }
 
-// Operator= overload
+
 ScavTrap&	ScavTrap::operator=(ScavTrap const& rhs) {
 
 	if (this != &rhs) {
@@ -44,84 +47,99 @@ ScavTrap&	ScavTrap::operator=(ScavTrap const& rhs) {
 	return *this;
 }
 
-// Destructor
+
 ScavTrap::~ScavTrap() {
 
 	std::cout << "Oh no, I'm dying.." << std::endl;
 }
 
-std::string	ScavTrap::getname(void) const {
+
+std::string	ScavTrap::getname() const {
 
 	return this->_name;
 }
 
-int	ScavTrap::getHitpoints(void) const {
-	
+
+int	ScavTrap::getHitpoints() const {
+
 	return this->_hit_points;
 }
 
-int	ScavTrap::getMaxHitpoints(void) const {
-	
+
+int	ScavTrap::getMaxHitpoints() const {
+
 	return this->_max_hit_points;
 }
 
-int	ScavTrap::getEnergypoints(void) const {
-	
+
+int	ScavTrap::getEnergypoints() const {
+
 	return this->_energy_points;
 }
 
-int	ScavTrap::getmaxEnergypoints(void) const {
-	
+
+int	ScavTrap::getmaxEnergypoints() const {
+
 	return this->_max_energy_points;
 }
 
-int	ScavTrap::getLevel(void) const {
-	
+
+int	ScavTrap::getLevel() const {
+
 	return this->_level;
 }
 
-int	ScavTrap::getMeleeAttackDamage(void) const {
-	
+
+int	ScavTrap::getMeleeAttackDamage() const {
+
 	return this->_melee_attack_damage;
 }
 
-int	ScavTrap::getRangeAttackDamage(void) const {
-	
+
+int	ScavTrap::getRangeAttackDamage() const {
+
 	return this->_range_attack_damage;
 }
 
-int	ScavTrap::getArmorDamageReduction(void) const {
-	
+
+int	ScavTrap::getArmorDamageReduction() const {
+
 	return this->_armor_damage_reduction;
 }
 
 
 void	ScavTrap::meleeAttack(std::string const& target) const {
 
-	std::cout << this->_name << " punches " << target << " with a boxe glove" << std::endl;
+	std::cout << this->_name << " punches " << target << " with a boxe glove, dealing "
+	<< this->_melee_attack_damage << " points of damage" << std::endl;
 }
 
 
 void	ScavTrap::rangedAttack(std::string const& target) const {
-	std::cout << this->_name << " spits on " << target << std::endl;
+
+	std::cout << this->_name << " spits on " << target << ", dealing "
+	<< this->_range_attack_damage << " points of damage" << std::endl;
 }
 
 
-void	ScavTrap::takeDamage(unsigned int amount) {
+void	ScavTrap::takeDamage(unsigned int damage) {
 
 	std::cout << this->_name << " is under attack !" << std::endl;
 
-	if (amount <= this->_armor_damage_reduction) {
+	if (damage <= this->_armor_damage_reduction) {
 		std::cout << "Ah ! It did nothing !" << std::endl;
 		return;
 	}
 
-	this->_hit_points -= (amount - this->_armor_damage_reduction);
-	std::cout << "Ouch ! It hurts !" << std::endl;
-
-	if (this->_hit_points <= 0) {
-		std::cout << "Oh no ! "  << this->_name << " got hit to the ground !" << std::endl;
+	damage -= this->_armor_damage_reduction;
+	if (this->_hit_points <= damage) {
+		std::cout << "Oh no ! "  << this->_name << " got P4WN3D !" << std::endl;
 		this->_hit_points = 0;
+	}
+	else {
+		this->_hit_points -= damage;
+		std::cout << "Ouch ! It hurts ! " << this->_name << " now has "
+		<< this->_hit_points << " HP" << std::endl;
 	}
 }
 
@@ -139,35 +157,50 @@ void	ScavTrap::beRepaired(unsigned int amount) {
 }
 
 
-void	ScavTrap::challengeNewcommer(std::string const& target) {
+void	ScavTrap::challengeNewcommer(std::string const& target) const {
 
 	if (this->_energy_points < 25) {
-		std::cout << "...Not enough energy. It happens sometime." << std::endl;
+		std::cerr << "...Not enough energy. It happens sometime." << std::endl;
 		return;
 	}
 
-	switch (rand() % 7) {
+	int	const choice = rand() % 78 % 25 % 15 % 7; // Ugly trick to beat a hair-pulling bug
+
+	switch (choice) {
 		case 0:
-			std::cout << this->_name << " laughs at " << target << std::endl;break;
-		
+			std::cout << this->_name << " laughs at " << target << std::endl;
+			break;
+
 		case 1:
-			std::cout << this->_name << " challenges " << target << " to a game of charade" << std::endl;break;
+			std::cout << this->_name << " challenges " << target << " to a game of charade"
+			<< std::endl;
+			break;
 
 		case 2:
-			std::cout << this->_name << " pretends to shake " << target << "'s hand but comb its non-existent hair instead" << std::endl;break;
+			std::cout << this->_name << " pretends to shake " << target
+			<< "'s hand but comb its non-existent hair instead" << std::endl;
+			break;
 
 		case 3:
-			std::cout << this->_name << " monologues for hours. " << target << " does not wait and passes the doors" << std::endl;break;
-		
+			std::cout << this->_name << " monologues for hours. " << target
+			<< " does not wait and passes the doors" << std::endl;
+			break;
+
 		case 4:
-			std::cout << this->_name << " fires a water gun on " << target << "... It's not very effective" << std::endl;break;
+			std::cout << this->_name << " fires a water gun on " << target
+			<< "... It's not very effective" << std::endl;
+			break;
 
 		case 5:
-			std::cout << this->_name << " turns into a ghost robot and does nothing since it can't touch anything " << target << std::endl;break;
-		
+			std::cout << this->_name << " turns into a ghost robot and does nothing" <<
+			" since it can't touch " << target << std::endl;
+			break;
+
 		case 6:
-			std::cout << this->_name << " run away screaming. " << target << " is confused.." << std::endl;break;
-		
+			std::cout << this->_name << " run away screaming. " << target
+			<< " is confused.." << std::endl;
+			break;
+
 		default:
 			break;
 	}

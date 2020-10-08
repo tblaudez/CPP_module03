@@ -6,13 +6,14 @@
 /*   By: tblaudez <tblaudez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/23 16:29:05 by tblaudez      #+#    #+#                 */
-/*   Updated: 2020/09/24 15:32:17 by tblaudez      ########   odam.nl         */
+/*   Updated: 2020/10/08 11:41:29 by tblaudez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <iostream>
+
+#include <string> // duh..
 
 
 class ClapTrap {
@@ -20,27 +21,28 @@ class ClapTrap {
 public:
 
 	ClapTrap(std::string name="Clappy", int hit_points=0, int max_hit_points=0, int energy_points=0,
-		int max_energy_points=0, int level=0, int melee_attack_damage=0, int ranger_attack_damage=0,
+		int max_energy_points=0, int level=0, int melee_attack_damage=0, int range_attack_damage=0,
 		int armor_damage_reduction=0);
 	ClapTrap(ClapTrap const& src);
 	ClapTrap& operator=(ClapTrap const& rhs);
 	~ClapTrap();
 
-	virtual void	rangedAttack(std::string const& target) const = 0;
-	virtual void	meleeAttack(std::string const& target) const = 0;
-	
+	std::string		getname() const;
+	int				getHitpoints() const;
+	int				getMaxHitpoints() const;
+	int				getEnergypoints() const;
+	int				getmaxEnergypoints() const;
+	int				getLevel() const;
+	int				getMeleeAttackDamage() const;
+	int				getRangeAttackDamage() const;
+	int				getArmorDamageReduction() const;
+
+	void			rangedAttack(std::string const& target) const;
+	void			meleeAttack(std::string const& target) const;
+
 	void			takeDamage(unsigned int amount);
 	void			beRepaired(unsigned int amount);
 
-	std::string		getname(void) const;
-	int				getHitpoints(void) const;
-	int				getMaxHitpoints(void) const;
-	int				getEnergypoints(void) const;
-	int				getmaxEnergypoints(void) const;
-	int				getLevel(void) const;
-	int				getMeleeAttackDamage(void) const;
-	int				getRangeAttackDamage(void) const;
-	int				getArmorDamageReduction(void) const;
 
 protected:
 

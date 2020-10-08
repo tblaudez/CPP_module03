@@ -6,7 +6,7 @@
 /*   By: tblaudez <tblaudez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/23 16:41:25 by tblaudez      #+#    #+#                 */
-/*   Updated: 2020/10/07 14:59:19 by tblaudez      ########   odam.nl         */
+/*   Updated: 2020/10/08 10:56:05 by tblaudez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 
 FragTrap::FragTrap(std::string name) : _name(name), _hit_points(100), _max_hit_points(100),
-_energy_points(50), _max_energy_points(50), _level(1), _melee_attack_damage(20),
-_range_attack_damage(15), _armor_damage_reduction(3) {
+_energy_points(100), _max_energy_points(100), _level(1), _melee_attack_damage(30),
+_range_attack_damage(20), _armor_damage_reduction(5) {
 
 	std::cout << "Yo ! I am a FR4G-TP unit named " << this->_name << std::endl;
 }
@@ -50,7 +50,8 @@ FragTrap&	FragTrap::operator=(FragTrap const& rhs) {
 
 FragTrap::~FragTrap() {
 
-	std::cout << "Nooo It can't be !!!" << std::endl;
+	std::cout << this->_name << " self-destructed because we needed fireworks"
+	<< std::endl;
 }
 
 
@@ -109,31 +110,35 @@ int	FragTrap::getArmorDamageReduction() const {
 
 void	FragTrap::meleeAttack(std::string const& target) const {
 
-	std::cout << this->_name << " strikes " << target << " with a huge hammer" << std::endl;
+	std::cout << this->_name << " strikes " << target << " with a huge hammer, dealing "
+	<< this->_melee_attack_damage << " points of damage" << std::endl;
 }
 
 
 void	FragTrap::rangedAttack(std::string const& target) const {
 
-	std::cout << this->_name << " 360-no-scope-headshots " << target << std::endl;
+	std::cout << this->_name << " 360-no-scope-headshots " << target << ", dealing "
+	<< this->_range_attack_damage << " points of damage" << std::endl;
 }
 
 
-void	FragTrap::takeDamage(unsigned int amount) {
+void	FragTrap::takeDamage(unsigned int damage) {
 
 	std::cout << this->_name << " is under attack !" << std::endl;
 
-	if (amount <= this->_armor_damage_reduction) {
-		std::cout << "Ah ! It did nothing !" << std::endl;
+	if (damage <= this->_armor_damage_reduction) {
+		std::cout << "Ah ! My armor is unpenetrable !" << std::endl;
 		return;
 	}
 
-	this->_hit_points -= (amount - this->_armor_damage_reduction);
-	std::cout << "Ouch ! It hurts !" << std::endl;
-
-	if (this->_hit_points <= 0) {
+	damage -= this->_armor_damage_reduction;
+	if (this->_hit_points <= damage) {
 		std::cout << "Oh no ! "  << this->_name << " got hit to the ground !" << std::endl;
 		this->_hit_points = 0;
+	}
+	else {
+		this->_hit_points -= damage;
+		std::cout << "Ouch ! It hurts ! " << this->_name << " now has " << this->_hit_points << " HP" << std::endl;
 	}
 }
 
@@ -158,9 +163,7 @@ void	FragTrap::vaulthunter_dot_exe(std::string const& target) const {
 		return;
 	}
 
-	int const choice = rand() % 7;
-	std::cerr << choice << std::endl;
-
+	int	const choice = rand() % 78 % 25 % 15 % 7; // Ugly trick to beat a hair-pulling bug
 
 	switch (choice) {
 		case 0:
