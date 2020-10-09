@@ -6,13 +6,11 @@
 /*   By: tblaudez <tblaudez@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/24 13:35:05 by tblaudez      #+#    #+#                 */
-/*   Updated: 2020/10/08 11:34:45 by tblaudez      ########   odam.nl         */
+/*   Updated: 2020/10/09 17:40:39 by tblaudez      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SuperTrap.hpp"
-
-#include <iostream>
 
 
 SuperTrap::SuperTrap(std::string name) : ClapTrap(name), FragTrap(), NinjaTrap() {
